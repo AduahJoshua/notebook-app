@@ -13,7 +13,7 @@ const NoteCards = () => {
                 <div key={index}>
                     <p>Note Title:{note.title}</p>
                     <p>Date: {note.date}</p>
-                    <p>Description: {note.noteText}</p>
+                    <p>Note Description: {note.noteText}</p>
                 </div>
             ))}
         </>
