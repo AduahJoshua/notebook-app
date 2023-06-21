@@ -1,38 +1,36 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import React from "react";
-import { Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { editNote } from "../slices/notesSlice";
+import { addNote } from "../slices/notesSlice";
 import { useState } from "react";
-import { Stack, TextField, TextareaAutosize } from "@mui/material";
+import { nanoid } from "@reduxjs/toolkit";
+import { Button, Stack, TextField, TextareaAutosize } from "@mui/material";
 import useCreateDate from "../hooks/useCreateDate";
 
-function NoteEdit({ prefill, closeModal }) {
+const NoteForm = ({ closeModal }) => {
   const date = useCreateDate();
-  const [track, setTrack] = useState({
-    id: prefill.id,
-    title: prefill.title,
-    created_date: prefill.created_date,
-    noteText: prefill.noteText,
+  const [note, setNote] = useState({
+    id: nanoid(),
+    title: "",
+    noteText: "",
   });
 
   const dispatch = useDispatch();
 
-  const handleChange = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setTrack({
-      modified_date: date,
-      ...track,
-      [e.target.name]: e.target.value,
-    });
+    dispatch(addNote(note));
+    closeModal();
   };
 
-  const handleEditChange = (e) => {
+  const handleChange = (e) => {
     e.preventDefault();
-    console.log(track);
-    dispatch(editNote(track));
-    closeModal();
+    setNote({
+      ...note,
+      created_date: date,
+      [e.target.name]: e.target.value,
+    });
   };
 
   return (
@@ -40,7 +38,7 @@ function NoteEdit({ prefill, closeModal }) {
       <Stack
         component="form"
         autoComplete="off"
-        onSubmit={handleEditChange}
+        onSubmit={handleSubmit}
         spacing={8}
       >
         <div className="d-flex justify-content-between">
@@ -49,7 +47,7 @@ function NoteEdit({ prefill, closeModal }) {
             variant="standard"
             onChange={handleChange}
             name="title"
-            value={track.title}
+            value={note.title}
             sx={{
               width: "70%",
               "& .MuiInputBase-input": {
@@ -59,17 +57,16 @@ function NoteEdit({ prefill, closeModal }) {
             required
           />
           <Button
-            variant="contained"
             type="submit"
-            className="align-self-center bg-success text-white fw-bold"
+            className="align-self-center bg-primary text-white fw-bold"
           >
-            SAVE
+            Add Note
           </Button>
         </div>
         <TextareaAutosize
           onChange={handleChange}
           name="noteText"
-          value={track.noteText}
+          value={note.noteText}
           className="form-textarea"
           minRows={40}
           placeholder="Type notes here..."
@@ -78,6 +75,6 @@ function NoteEdit({ prefill, closeModal }) {
       </Stack>
     </>
   );
-}
+};
 
-export default NoteEdit;
+export default NoteForm;

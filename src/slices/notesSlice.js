@@ -1,21 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { nanoid } from '@reduxjs/toolkit';
 
 const initialState = {
-    notes: [
-        {
-            id : nanoid(),
-            title: "Physics",
-            date: "02/04/2000",
-            noteText: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda a neque repellendus, maiores aperiam ex minima iure asperiores? Iste esse eligendi eveniet explicabo earum quidem quas odit nemo officiis dolores."
-        },
-        {
-            id: nanoid(),
-            title: "Chemistry",
-            date: "03/04/2000",
-            noteText: "Dolor sit amet consectetur adipisicing elit. Assumenda a neque repellendus, maiores aperiam ex minima iure asperiores? Iste esse eligendi"
-        }
-    ]
+    notes: [],
+    searchQuery: "",
 }
 
 const notesSlice = createSlice({
@@ -30,10 +17,13 @@ const notesSlice = createSlice({
         },
         deleteNote: (state, action) => {
             state.notes= state.notes.filter((note)=> note.id !== action.payload)
-        }
+        },
+        updateSearchQuery: (state, action) => {
+            state.searchQuery = action.payload;
+        },
     },
 })
 
-export const { addNote, editNote, deleteNote} = notesSlice.actions
+export const { addNote, editNote, deleteNote, updateSearchQuery} = notesSlice.actions
 
 export default notesSlice.reducer

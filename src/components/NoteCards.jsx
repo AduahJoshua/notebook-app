@@ -1,73 +1,126 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import { deleteNote } from '../slices/notesSlice';
-import Modal from 'react-bootstrap/Modal';
-import { useState } from 'react';
-import NoteEdit from './NoteEdit';
+/* eslint-disable no-unused-vars */
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import { deleteNote, addNote } from "../slices/notesSlice";
+import { useState } from "react";
+import NoteEdit from "./NoteEdit";
+import { LuEdit3 } from "react-icons/lu";
+import { MdDelete } from "react-icons/md";
+import { Box, Modal } from "@mui/material";
+import style from "./modalStyles";
 
 const NoteCards = () => {
-    const state = useSelector((state) => {
-        return state.notesReducer;
+  const state = useSelector((state) => {
+    return state.notesReducer;
+  });
+
+  const dispatch = useDispatch();
+
+  function deleteNoteHandler(id) {
+    dispatch(deleteNote(id));
+  } //// delete function
+
+  const [open, setOpen] = useState(false);
+  const [preFill, setPreFill] = useState(null);
+
+  const handleClose = () => setOpen(false);
+
+  const handleOpen = (note) => {
+    setPreFill(note);
+    setOpen(true);
+  };
+
+  const filteredNotes = state.notes.filter(
+    (note) =>
+      note.title.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+      note.noteText.toLowerCase().includes(state.searchQuery.toLowerCase())
+  );
+
+  useEffect(() => {
+    const savedNotes = JSON.parse(localStorage.getItem("notes-app-data"));
+    if (savedNotes) {
+      savedNotes.forEach((note) => {
+        const isDuplicate = state.notes.some(
+          (existingNote) => existingNote.id === note.id
+        );
+        if (!isDuplicate) {
+          dispatch(addNote(note));
+        }
       });
+    }
+  }, [dispatch, state.notes]);
 
-    const dispatch = useDispatch();
+  useEffect(() => {
+    localStorage.setItem("notes-app-data", JSON.stringify(state.notes));
+  }, [state.notes]);
 
-
-      function deleteNoteHandler(id) {
-        dispatch(deleteNote(id))
-      }//// delete function
-  
-    
-const [show, setShow] = useState(false);
-const [preFill, setPreFill] = useState(null);
-    
-const handleClose = () => setShow(false);
-
-    const handleShow = (note) => {
-         setPreFill(note);
-        setShow(true);
-      };
-    return (
-        <>
-            <div>
-            {state.notes.map((note, index) => (
-          <Card key={index} style={{ width: '18rem', marginBottom: '10px' }}>
+  return (
+    <>
+      <div className="note_card__container mt-4">
+        {filteredNotes.map((note) => (
+          <Card key={note.id} className="border-0 shadow-sm">
             <Card.Body>
-              <Card.Title>{note.title}</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">Student Notes</Card.Subtitle>
+              <div className=" d-flex justify-content-between">
+                <Card.Title className="fw-bold text-success">
+                  {note.title}
+                </Card.Title>
+                <Button
+                  variant="danger"
+                  onClick={() => deleteNoteHandler(note.id)}
+                  className=" rounded-circle"
+                >
+                  <MdDelete />
+                </Button>
+              </div>
+              <Card.Subtitle className="mb-2 text-muted">
+                Student Notes
+              </Card.Subtitle>
               <Card.Text>
-                <p>Date: {note.date}</p>
-                <p>Note Description: {note.noteText}</p>
+                <small>
+                  <span className="fw-bold text-muted">Date created: </span>
+                  {note.created_date} <br />
+                  <span className="fw-bold text-muted">Date modified: </span>
+                  {note.modified_date}
+                </small>
+                <br />
+                <small>
+                  <span className="fw-bold text-muted">Note Description: </span>
+                  {note.noteText.length > 40 ? (
+                    <>
+                      {note.noteText.substring(0, 50)}
+                      <span className="fw-bolder">...</span>
+                    </>
+                  ) : (
+                    note.noteText
+                  )}
+                </small>
               </Card.Text>
-              <Button variant="primary" onClick={()=>handleShow(note)}>
-        Edit
-      </Button>
-              <Button variant="danger" onClick={()=>deleteNoteHandler(note.id)}>Delete</Button>
+              <Button
+                variant="warning"
+                onClick={() => handleOpen(note)}
+                className="rounded-circle"
+              >
+                <LuEdit3 />
+              </Button>
             </Card.Body>
           </Card>
         ))}
-            </div>
-            <Modal show={show} onHide={handleClose}>
-<Modal.Header closeButton>
-  <Modal.Title>Edit Notes Here</Modal.Title>
-</Modal.Header>
-                <Modal.Body>
-                <NoteEdit prefill={preFill} closeModal={handleClose} />
-                   </Modal.Body>
-</Modal>
-      </>
-      
-    );
-}
+      </div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        className="modal__backdrop"
+      >
+        <Box sx={style}>
+          <NoteEdit closeModal={handleClose} prefill={preFill} />
+        </Box>
+      </Modal>
+    </>
+  );
+};
 
 export default NoteCards;
-
-
-
-// <Button variant="primary" onClick={handleClose}>
-// Save Changes
-// </Button>
-// prefill={preFill}
- 
