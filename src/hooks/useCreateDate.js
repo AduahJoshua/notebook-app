@@ -42,7 +42,7 @@ const useCreateDate = () => {
       break;
   }
 
-  const date = `${dateObj.getDate()} ${monthName}  ${dateObj.getFullYear()}`;
+  const date = `${dateObj.getDate()} ${monthName}  ${dateObj.getFullYear()} [${dateObj.getHours()}:${dateObj.getMinutes()}:${dateObj.getSeconds()}]`;
   return date;
 };
 

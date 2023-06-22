@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import { deleteNote, addNote } from "../slices/notesSlice";
 import { useState } from "react";
 import NoteEdit from "./NoteEdit";
-import { LuEdit3 } from "react-icons/lu";
+import { LuEdit, LuEdit2, LuEdit3 } from "react-icons/lu";
 import { MdDelete } from "react-icons/md";
 import { Box, Modal } from "@mui/material";
 import style from "./modalStyles";
@@ -60,19 +60,19 @@ const NoteCards = () => {
     <>
       <div className="note_card__container mt-4">
         {filteredNotes.map((note) => (
-          <Card key={note.id} className="border-0 shadow-sm">
+          <Card key={note.id} className="border-0 note__card">
             <Card.Body>
               <div className=" d-flex justify-content-between">
                 <Card.Title className="fw-bold text-success">
                   {note.title}
                 </Card.Title>
-                <Button
-                  variant="danger"
+                <div
                   onClick={() => deleteNoteHandler(note.id)}
-                  className=" rounded-circle"
+                  style={{cursor: "pointer"}}
+                  className="rounded-circle bg-transparent border-0 note_card__action"
                 >
-                  <MdDelete />
-                </Button>
+                  <MdDelete color="#dc3545" className="action"/>
+                </div>
               </div>
               <Card.Subtitle className="mb-2 text-muted">
                 Student Notes
@@ -97,13 +97,13 @@ const NoteCards = () => {
                   )}
                 </small>
               </Card.Text>
-              <Button
-                variant="warning"
+              <div
                 onClick={() => handleOpen(note)}
-                className="rounded-circle"
+                style={{cursor: "pointer"}}
+                className="rounded-circle note_card__action"
               >
-                <LuEdit3 />
-              </Button>
+                <LuEdit color="#ffc107" className="action"/>
+              </div>
             </Card.Body>
           </Card>
         ))}
