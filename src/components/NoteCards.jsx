@@ -2,11 +2,10 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import { deleteNote, addNote } from "../slices/notesSlice";
+import { deleteNote, setLoadedNotes } from "../slices/notesSlice";
 import { useState } from "react";
 import NoteEdit from "./NoteEdit";
-import { LuEdit, LuEdit2, LuEdit3 } from "react-icons/lu";
+import { LuEdit } from "react-icons/lu";
 import { MdDelete } from "react-icons/md";
 import { Box, Modal } from "@mui/material";
 import style from "./modalStyles";
@@ -41,16 +40,9 @@ const NoteCards = () => {
   useEffect(() => {
     const savedNotes = JSON.parse(localStorage.getItem("notes-app-data"));
     if (savedNotes) {
-      savedNotes.forEach((note) => {
-        const isDuplicate = state.notes.some(
-          (existingNote) => existingNote.id === note.id
-        );
-        if (!isDuplicate) {
-          dispatch(addNote(note));
+      dispatch(setLoadedNotes(savedNotes));
         }
-      });
-    }
-  }, [dispatch, state.notes]);
+  }, [dispatch]);
 
   useEffect(() => {
     localStorage.setItem("notes-app-data", JSON.stringify(state.notes));
