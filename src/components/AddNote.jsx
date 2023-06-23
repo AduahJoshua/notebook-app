@@ -21,8 +21,8 @@ function AddNote() {
 
   return (
     <>
-      <div className="my-3 mt-lg-5">
-        <h1 className="fs-6">{/*{`${username}'s Notes`}*/} Add Notes Here</h1>
+      <div className="mt-5">
+        <h1 className="fs-6 fw-bold">{/*{`${username}'s Notes`}*/} Add Notes Here</h1>
         <div onClick={handleOpen} style={{ cursor: "pointer" }}>
           <AddCircle sx={{ fontSize: "3rem" }} />
         </div>

@@ -48,6 +48,7 @@ function NoteEdit({ prefill, closeModal }) {
             placeholder="Title"
             variant="standard"
             onChange={handleChange}
+            id="title"
             name="title"
             value={track.title}
             sx={{
@@ -68,6 +69,7 @@ function NoteEdit({ prefill, closeModal }) {
         </div>
         <TextareaAutosize
           onChange={handleChange}
+          id="noteText"
           name="noteText"
           value={track.noteText}
           className="form-textarea"

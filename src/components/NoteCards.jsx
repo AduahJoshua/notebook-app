@@ -69,7 +69,7 @@ const NoteCards = () => {
               <Card.Subtitle className="mb-2 text-muted">
                 Student Notes
               </Card.Subtitle>
-              <Card.Text>
+              <Card.Text style={{minHeight: "8rem"}}>
                 <small>
                   <span className="fw-bold text-muted">Date created: </span>
                   {note.created_date} <br />

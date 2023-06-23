@@ -18,6 +18,8 @@ function SearchBar() {
         <Search fontSize="large" />
         <input
           placeholder="Search notes..."
+          id="search"
+          name="search"
           type="text"
           onChange={handleSearch}
         />

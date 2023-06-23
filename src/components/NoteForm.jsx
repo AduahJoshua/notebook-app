@@ -20,8 +20,13 @@ const NoteForm = ({ closeModal }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addNote(note));
     closeModal();
+    if(note.title.trim()=== "" || note.noteText.trim()== "") {
+      alert ("No note will be created");
+      return;
+    }
+    dispatch(addNote(note));
+    
   };
 
   const handleChange = (e) => {
@@ -46,6 +51,7 @@ const NoteForm = ({ closeModal }) => {
             placeholder="Title"
             variant="standard"
             onChange={handleChange}
+            id="title"
             name="title"
             value={note.title}
             sx={{
@@ -54,7 +60,6 @@ const NoteForm = ({ closeModal }) => {
                 fontSize: "calc(1rem + 2vw)",
               },
             }}
-            required
           />
           <Button
             type="submit"
@@ -65,12 +70,12 @@ const NoteForm = ({ closeModal }) => {
         </div>
         <TextareaAutosize
           onChange={handleChange}
+          id="noteText"
           name="noteText"
           value={note.noteText}
           className="form-textarea"
-          minRows={40}
+          minRows={30}
           placeholder="Type notes here..."
-          required
         />
       </Stack>
     </>
